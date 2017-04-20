@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">{{title}}</h1>
+  </div>
+</div>
+{{#createdMessage}}<div class="alert alert-success" role="alert">{{createdMessage}}</div>{{/createdMessage}}
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>编号</th>
+    <th>用户名</th>
+    <th>姓名</th>
+    <th>邮箱</th>
+  </tr>
+  </thead>
+<tbody>
+  {{#employees}}
+  <tr>
+    <th scope="row">{{id}}</th>
+    <td>{{username}}</td>
+    <td>{{firstName}}{{lastName}}</td>
+    <td>{{email}}</td>
+  </tr>
+  </tbody>
+  {{/employees}}
+</table>
+<a href="/employees/create" class="btn btn-primary">新建职员</a>

@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  h1= title
+
+  h2 Create a new user
+  form(action="/workstations/create", method="post")
+    input(type="text", name="stationName")
+    input(type="text", name="city")
+    input(type="text", name="province")
+    input(type="text", name="address")
+    input(type="submit")
+
+  form(action="/customers/create", method="post")
+    input(type="text", name="username")
+    input(type="text", name="firstName")
+    input(type="text", name="lastName")
+    input(type="text", name="gender")
+    input(type="submit")
+
+  h2 Users
+
+  ul
+  each user in users
+    li
+      = user.username
+      | &nbsp;
+      | (
+      a(href="/users/" + user.id + "/destroy") Destroy
+      | )
+      ul
+        li
+          | Create a new task:
+          form(action="/users/" + user.id + "/tasks/create", method="post", style="display: inline")
+            input(type="text", name="title")
+            input(type="submit")
+        each task in user.Tasks
+          li
+            = task.title
+            | &nbsp;
+            | (
+            a(href="/users/" + user.id + "/tasks/" + task.id + "/destroy") Destroy
+            | )
+block content
