@@ -3,7 +3,7 @@ var router = express.Router();
 var models  = require('../models');
 
 /* GET users listing. */
-router.post('/create', function(req, res) {
+router.post('/create', function(req, res, next) {
   console.log(req.body);
   console.log(req.query);
   models.Employee.create({
@@ -21,8 +21,7 @@ router.post('/create', function(req, res) {
       });
     } else {
       res.writeHead(302, {
-        'Location': '/employees/?created=' + employee.lastName + employee.firstName
-      });
+        'Location': '/v/employees/?created=' + employee.lastName + employee.firstName});
       res.end();
     }
   }).catch(function(errors) {
@@ -31,7 +30,14 @@ router.post('/create', function(req, res) {
 });
 
 router.get('/create', function(req, res) {
-  res.render('create_employee', {title: '创建管理员'});
+  if (req.isAPI) {
+    req.json({
+      success: false,
+      error: 'please use POST'
+    })
+  } else {
+    res.render('create_employee', {title: '创建管理员'});
+  }
 });
 
 router.get('/:workstation_id/destroy', function(req, res) {
@@ -46,9 +52,9 @@ router.get('/:workstation_id/destroy', function(req, res) {
   });
 });
 
-router.get('/:workstation_id', function(req, res) {
-  models.Workstation.findById(req.params.workstation_id).then(function(workstation) {
-    res.json(workstation);
+router.get('/:employee_id/', function(req, res) {
+  models.Employee.findById(req.params.employee_id).then(function(employee) {
+    res.json(employee);
   }).catch(function(errors) {
     next({errors: errors})
   });
@@ -56,11 +62,22 @@ router.get('/:workstation_id', function(req, res) {
 
 router.get('/', function(req, res) {
   models.Employee.findAll().then(function(employees) {
-    res.render('employees', {
-      title: '职员管理',
-      createdMessage: '成功创建用户 ' + req.query.created,
-      employees:employees
-    });
+    if (req.isAPI) {
+      res.json({
+        success: true,
+        employees: employees,
+        error: ''
+      });
+    } else {
+      let data = {
+        title: '职员管理',
+        employees:employees
+      };
+      if (req.query.created) {
+        data.createdMessage = '成功创建用户 ' + req.query.created;
+      }
+      res.render('employees', data);
+    }
   })
 });
 
