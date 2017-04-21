@@ -4,23 +4,35 @@ var models  = require('../models');
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
-  console.log(req.body);
-  console.log(req.query);
-  models.Workstation.create({
-    stationName: req.body.stationName,
-    city: req.body.ctiy,
-    province: req.body.province,
-    address: req.body.address,
-    administratorId: req.body.administratorId
-  }).then(function(workstation) {
-    res.json({
-      success: true,
-      workstation: workstation,
-      error: ''
+  if (true) {
+    res.writeHead(302, {
+      'Location': '/v/workstations/?created='});
+    res.end();
+  } else {
+    models.Workstation.create({
+      stationName: req.body.stationName,
+      city: req.body.ctiy,
+      province: req.body.province,
+      address: req.body.address,
+      administratorId: req.body.administratorId
+    }).then(function(workstation) {
+      res.json({
+        success: true,
+        workstation: workstation,
+        error: ''
+      });
+    }).catch(function(errors) {
+      next({errors: errors})
     });
-  }).catch(function(errors) {
-    next({errors: errors})
-  });
+  }
+});
+
+router.get('/', function(req, res, next) {
+  res.render('workstations', {title: '移动站列表'});
+});
+
+router.get('/create', function(req, res, next) {
+  res.render('create_workstation', {title: '新建移动站'});
 });
 
 router.get('/:workstation_id/destroy', function(req, res) {

@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var workstations = require('./routes/workstations');
 var customers = require('./routes/customers');
 var employees = require('./routes/employee-router');
+var devices = require('./routes/device-router');
 
 var app = express();
 // Register '.mustache' extension with The Mustache Express
@@ -46,7 +47,8 @@ app.use('/:source/', function(req, res, next) {
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/workstations', workstations);
+app.use('/:source/workstations', workstations);
+app.use('/:source/devices', devices);
 app.use('/customers', customers);
 app.use('/:source/employees', employees);
 app.use('/under_construction', function(req, res) {
