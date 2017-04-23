@@ -28,13 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/:format/', function(req, res, next) {
-//   if (req.param.format === 'api') {
-//     req.isAPI = true;
-//   } else if(req.param.format === 'v') {
-//     req.isAPI = false;
-//   }
-// });
 app.use('/:source/', function(req, res, next) {
   if (req.params.source === 'api') {
     req.isAPI = true;
@@ -44,16 +37,15 @@ app.use('/:source/', function(req, res, next) {
   next();
 });
 
-
 app.use('/', index);
 app.use('/users', users);
 app.use('/:source/workstations', workstations);
 app.use('/:source/devices', devices);
-app.use('/customers', customers);
 app.use('/:source/employees', employees);
 app.use('/under_construction', function(req, res) {
   res.render('under_construction', {});
 });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('页面找不到啦～');
@@ -61,14 +53,13 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   const errorMessage = err.errors ? err.errors[0] : err.message ;
-  if (req.query.format === 'json') {
+  if (req.query.format === 'json' || req.isAPI) {
     res.json({
       sucess: false,
       errors: err.errors ? err.errors : err.message,

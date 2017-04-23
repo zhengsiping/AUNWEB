@@ -4,8 +4,6 @@ var models  = require('../models');
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
-  console.log(req.body);
-  console.log(req.query);
   models.Employee.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -21,7 +19,8 @@ router.post('/create', function(req, res, next) {
       });
     } else {
       res.writeHead(302, {
-        'Location': '/v/employees/?created=' + employee.lastName + employee.firstName});
+        'Location': '/v/employees/?created=' + employee.lastName + employee.firstName
+      });
       res.end();
     }
   }).catch(function(errors) {

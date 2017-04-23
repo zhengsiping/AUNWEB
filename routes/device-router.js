@@ -4,11 +4,26 @@ var models  = require('../models');
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
-  if (true) {
-    res.writeHead(302, {
-      'Location': '/v/devices/?created='});
-    res.end();
-  }
+  models.Device.create({
+    deviceName: req.body.deviceName,
+    workstationId: req.body.workstationId,
+    typeId: req.body.typeId,
+    status: {statusId: 1}
+  },{
+    include: [{
+      model: models.DeviceStatus,
+      as: 'status'
+    }]
+  }).then(function(device) {
+    res.send(device);
+  }).catch(function(errors) {
+    next({errors: errors})
+  });
+  // if (true) {
+  //   res.writeHead(302, {
+  //     'Location': '/v/devices/?created='});
+  //   res.end();
+  // }
 });
 
 router.get('/', function(req, res, next) {

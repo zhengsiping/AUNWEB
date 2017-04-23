@@ -4,27 +4,21 @@ var models  = require('../models');
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
-  if (true) {
-    res.writeHead(302, {
-      'Location': '/v/workstations/?created='});
-    res.end();
-  } else {
-    models.Workstation.create({
-      stationName: req.body.stationName,
-      city: req.body.ctiy,
-      province: req.body.province,
-      address: req.body.address,
-      administratorId: req.body.administratorId
-    }).then(function(workstation) {
-      res.json({
-        success: true,
-        workstation: workstation,
-        error: ''
-      });
-    }).catch(function(errors) {
-      next({errors: errors})
+  models.Workstation.create({
+    stationName: req.body.stationName,
+    city: req.body.ctiy,
+    province: req.body.province,
+    address: req.body.address,
+    administratorId: req.body.administratorId
+  }).then(function(workstation) {
+    res.json({
+      success: true,
+      workstation: workstation,
+      error: ''
     });
-  }
+  }).catch(function(errors) {
+    next({errors: errors})
+  });
 });
 
 router.get('/', function(req, res, next) {

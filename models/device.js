@@ -14,15 +14,22 @@ module.exports = function(sequelize, DataTypes) {
         Device.belongsTo(models.Workstation, {
           onDelete: "NO ACTION",
           foreignKey: {
-            allowNull: false
+            allowNull: true
           }
         });
         Device.belongsTo(models.DeviceType, {
           onDelete: 'No Action',
           foreignKey: {
-            allowNull: false,
-            as: 'type'
-          }
+            allowNull: false
+          },
+          as: 'type'
+        });
+        Device.hasOne(models.DeviceStatus, {
+          onDelete: 'NO Action',
+          foreignKey: {
+            allowNull: true
+          },
+          as: 'status'
         });
       }
     }
