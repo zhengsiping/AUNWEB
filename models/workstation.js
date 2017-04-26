@@ -2,21 +2,22 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Workstation = sequelize.define("Workstation", {
-    stationName: {
+    name: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    city: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    province: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false,
+      notEmpty: true
     },
     address: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
+    },
+    phone: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
+    },
+    note: {
+      type: DataTypes.STRING(2000)
     }
   }, {
     classMethods: {
@@ -25,10 +26,18 @@ module.exports = function(sequelize, DataTypes) {
         // Can also simply do Task.belongsTo(models.User);
         Workstation.belongsTo(models.Employee, {
           onDelete: "NO ACTION",
-          foreignKey: {
-            allowNull: true
-          },
+          foreignKey: 'administratorId',
           as: 'administrator'
+        });
+        Workstation.belongsTo(models.City, {
+          onDelete: 'No Action',
+          foreignKey: 'cityId',
+          as: 'city'
+        });
+        Workstation.belongsTo(models.Province, {
+          onDelete: 'No Action',
+          foreignKey: 'provinceId',
+          as: 'province'
         });
       }
     }

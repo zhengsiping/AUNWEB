@@ -7,26 +7,25 @@
 <form method="post" action="/v/devices/create">
   <div class="form-group">
     <label for="deviceNameInput">设备名</label>
-    <input type="text" name="deviceName" class="form-control" id="deviceNameInput" placeholder="输入设备名">
+    <input type="text" name="name" class="form-control" id="deviceNameInput" placeholder="输入设备名">
     <small id="usernameInput" class="form-text text-muted">字母，数字，中文字符，请勿包含特殊字符</small>
   </div>
   <div class="form-group">
     <label for="deviceType">设备类型</label>
-    <select class="form-control" id="deviceType">
-      <option value="0">请选择设备类型</option>
-      <option value="1">HTC Vive</option>
-      <option value="2">Hololens</option>
-      <option value="3">Oculus</option>
+    <select class="form-control" name="typeId" id="deviceType">
+      <option value="">请选择设备类型</option>
+      {{#deviceTypes}}
+        <option value={{id}}>{{name}}</option>
+      {{/deviceTypes}}
     </select>
   </div>
   <div class="form-group">
-    <label for="deviceWorkstation">工作站</label>
-    <select class="form-control" id="deviceWorkstation">
-      <option value="0">请选择工作站</option>
-      <option value="1">碧桂园府前一号智能移动展厅</option>
-      <option value="2">中梁东润园智能移动展厅</option>
-      <option value="2">万科学院路七号智能移动展厅</option>
-      <option value="2">置信银河广场智能移动展厅</option>
+    <label for="deviceWorkstation">移动站</label>
+    <select class="form-control" id="deviceWorkstation" name="workstationId">
+      <option value="">请选择移动站</option>
+      {{#workstations}}
+        <option value={{id}}>{{name}}</option>
+      {{/workstations}}
     </select>
   </div>
   <button type="submit" class="btn btn-primary">提交</button>

@@ -5,11 +5,13 @@ var models  = require('../models');
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
   models.Employee.create({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    name: req.body.name,
     username: req.body.username,
     email: req.body.email,
-    password: '123456'
+    password: '123456',
+    phone: req.body.phone,
+    note: req.body.note,
+    qq: req.body.qq
   }).then(function(employee) {
     if (req.isAPI) {
       res.json({
@@ -19,11 +21,12 @@ router.post('/create', function(req, res, next) {
       });
     } else {
       res.writeHead(302, {
-        'Location': '/v/employees/?created=' + employee.lastName + employee.firstName
+        'Location': '/v/employees/?created=' + encodeURIComponent(employee.name)
       });
       res.end();
     }
   }).catch(function(errors) {
+    console.log(errors);
     next({errors: errors})
   });
 });
@@ -39,10 +42,10 @@ router.get('/create', function(req, res) {
   }
 });
 
-router.get('/:workstation_id/destroy', function(req, res) {
-  models.Workstation.destroy({
+router.get('/:employee_id/destroy', function(req, res) {
+  models.Employees.destroy({
     where: {
-      id: req.params.workstation_id
+      id: req.params.employee_id
     }
   }).then(function() {
     res.redirect('/');

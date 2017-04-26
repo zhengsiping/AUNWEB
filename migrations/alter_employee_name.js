@@ -2,9 +2,9 @@
 
 module.exports = {
   up: function(queryInterface, Sequelize, done) {
-    queryInterface.addColumn(
-      'users',
-      'userAge',
+    queryInterface.changeColumn(
+      'employees',
+      'name',
       {
         type: Sequelize.STRING,
         allowNull: false
@@ -12,8 +12,14 @@ module.exports = {
     );
     done();
   },
-
   down: function(queryInterface) {
-    queryInterface.removeColumn('users', 'userAge')
+    queryInterface.changeColumn(
+      'employees',
+      'name',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      }
+    );
   }
 };

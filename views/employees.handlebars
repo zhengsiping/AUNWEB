@@ -3,7 +3,7 @@
     <h1 class="page-header">{{title}}</h1>
   </div>
 </div>
-{{#createdMessage}}<div class="alert alert-success" role="alert">{{createdMessage}}</div>{{/createdMessage}}
+{{#createdMessage}}<div class="alert alert-success" role="alert">{{{.}}}</div>{{/createdMessage}}
 <table class="table table-striped">
   <thead>
   <tr>
@@ -18,7 +18,7 @@
   <tr>
     <th scope="row">{{id}}</th>
     <td>{{username}}</td>
-    <td>{{firstName}}{{lastName}}</td>
+    <td>{{name}}</td>
     <td>{{email}}</td>
   </tr>
   </tbody>

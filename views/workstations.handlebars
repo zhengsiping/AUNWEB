@@ -3,36 +3,29 @@
     <h1 class="page-header">{{title}}</h1>
   </div>
 </div>
-{{#createdMessage}}<div class="alert alert-success" role="alert">{{createdMessage}}</div>{{/createdMessage}}
+{{#createdMessage}}<div class="alert alert-success" role="alert">{{{.}}}</div>{{/createdMessage}}
 <table class="table table-striped">
   <thead>
   <tr>
     <th>编号</th>
     <th>移动站名</th>
     <th>地址</th>
+    <th>城市</th>
+    <th>省</th>
+    <th>管理员</th>
   </tr>
   </thead>
 <tbody>
+  {{#workstations}}
   <tr>
-    <th scope="row">1</th>
-    <td>碧桂园府前一号智能移动展厅</td>
-    <td>碧桂园一号楼</td>
+    <th scope="row">{{id}}</th>
+    <td>{{name}}</td>
+    <td>{{address}}</td>
+    <td>{{city.name}}</td>
+    <td>{{province.name}}</td>
+    <td>{{administrator.name}}</td>
   </tr>
-  <tr>
-    <th scope="row">2</th>
-    <td>中梁东润园智能移动展厅</td>
-    <td>中梁东润园</td>
-  </tr>
-  <tr>
-    <th scope="row">3</th>
-    <td>万科学院路七号智能移动展厅</td>
-    <td>万科学院路七号</td>
-  </tr>
-  <tr>
-    <th scope="row">4</th>
-    <td>置信银河广场智能移动展厅</td>
-    <td>置信银河广场</td>
-  </tr>
+  {{/workstations}}
   </tbody>
 </table>
 <a href="/v/workstations/create" class="btn btn-primary">新建移动站</a>

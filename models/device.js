@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Device = sequelize.define("Device", {
-    deviceName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false
     }
@@ -13,22 +13,17 @@ module.exports = function(sequelize, DataTypes) {
         // Can also simply do Task.belongsTo(models.User);
         Device.belongsTo(models.Workstation, {
           onDelete: "NO ACTION",
-          foreignKey: {
-            allowNull: true
-          }
+          foreignKey: 'workstationId',
+          as: 'workstation'
         });
         Device.belongsTo(models.DeviceType, {
           onDelete: 'No Action',
-          foreignKey: {
-            allowNull: false
-          },
+          foreignKey: 'typeId',
           as: 'type'
         });
         Device.hasOne(models.DeviceStatus, {
           onDelete: 'NO Action',
-          foreignKey: {
-            allowNull: true
-          },
+          foreignKey: 'deviceId',
           as: 'status'
         });
       }
