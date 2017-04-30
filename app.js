@@ -5,12 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var workstations = require('./routes/workstations');
-var customers = require('./routes/customers');
-var employees = require('./routes/employee-router');
-var devices = require('./routes/device-router');
 
 var app = express();
 // Register '.mustache' extension with The Mustache Express
@@ -37,14 +31,37 @@ app.use('/:source/', function(req, res, next) {
   next();
 });
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/:source/workstations', workstations);
-app.use('/:source/devices', devices);
-app.use('/:source/employees', employees);
+var users = require('./routes/users');
+var workstations = require('./routes/workstations');
+var customers = require('./routes/customers');
+var employees = require('./routes/employee-router');
+var devices = require('./routes/device-router');
+
+app.use('/:source/admin/workstations', workstations);
+app.use('/:source/admin/devices', devices);
+app.use('/:source/admin/employees', employees);
 app.use('/under_construction', function(req, res) {
   res.render('under_construction', {});
 });
+
+
+var index = require('./routes/website/index');
+app.use('/', index);
+app.use('/index', index);
+var about = require('./routes/website/about');
+app.use('/about', about);
+var caseRoute = require('./routes/website/case');
+app.use('/case', caseRoute);
+var contact = require('./routes/website/contact');
+app.use('/contact', contact);
+var foot = require('./routes/website/foot');
+app.use('/foot', foot);
+var head = require('./routes/website/head');
+app.use('/head', head);
+var news = require('./routes/website/news');
+app.use('/news', news);
+var service = require('./routes/website/service');
+app.use('/service', service);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -70,6 +87,7 @@ app.use(function(err, req, res, next) {
     // render the error page
     res.status(err.status || 500);
     res.render('error', {
+      layout: false,
       errorCode: err.status,
       errorMessage: errorMessage
     });
