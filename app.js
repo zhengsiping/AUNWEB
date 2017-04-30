@@ -37,6 +37,13 @@ var customers = require('./routes/customers');
 var employees = require('./routes/employee-router');
 var devices = require('./routes/device-router');
 
+app.use('/api/workstations', workstations);
+app.use('/api/devices', devices);
+app.use('/api/employees', employees);
+app.use('/under_construction', function(req, res) {
+  res.render('under_construction', {});
+});
+
 app.use('/:source/admin/workstations', workstations);
 app.use('/:source/admin/devices', devices);
 app.use('/:source/admin/employees', employees);
