@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var models  = require('../models');
+var models  = require('../../models');
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {

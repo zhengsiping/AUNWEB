@@ -4,6 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var models = require('./models');
+var bcrypt = require('bcrypt');
+var flash = require('connect-flash');
+var session = require('express-session')
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
 
 
 var app = express();
@@ -21,14 +28,54 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
+app.use(session({cookie: {maxAge: 60000}, secret: 'aun_session'}));
 
-app.use('/:source/', function(req, res, next) {
-  if (req.params.source === 'api') {
-    req.isAPI = true;
-  } else if(req.params.source === 'v') {
-    req.isAPI = false;
+app.use('/:source/:app/', function(req, res, next) {
+  switch (req.params.source) {
+    case 'api':
+      req.isAPI = true;
+      break;
+    case 'v':
+      req.isMVC = true;
+      break;
+    case 'a':
+      req.isAjax = true;
+      break;
+    default:
+      req.isStatic = true;
+      req.isPortal = true;
+      //static html render
+  }
+  switch (req.params.app) {
+    case 'admin':
+      req.isAdmin = true;
+      break;
+    default:
+      req.isPortal = true;
+      break;
   }
   next();
+});
+
+const adminRoute = require('./routes/admin-route');
+app.use('/v/admin/', adminRoute);
+
+const storeRoute = require('./routes/store-route');
+app.use('/store', storeRoute);
+
+app.use('/v/admin/', function(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    req.flash('errorMsg', 'You are not log in');
+    res.redirect('/v/admin/login');
+  }
+});
+
+app.get('/v/admin/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/v/admin/login');
 });
 
 var users = require('./routes/users');
@@ -40,7 +87,7 @@ var devices = require('./routes/device-router');
 app.use('/api/workstations', workstations);
 app.use('/api/devices', devices);
 app.use('/api/employees', employees);
-app.use('/under_construction', function(req, res) {
+app.use('/v/admin/under_construction', function(req, res) {
   res.render('under_construction', {});
 });
 
@@ -49,6 +96,9 @@ app.use('/:source/admin/devices', devices);
 app.use('/:source/admin/employees', employees);
 app.use('/under_construction', function(req, res) {
   res.render('under_construction', {});
+});
+app.get('/:source/admin', function(req, res) {
+  res.render('index');
 });
 
 
