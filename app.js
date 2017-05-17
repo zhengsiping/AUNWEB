@@ -64,6 +64,9 @@ app.use('/v/admin/', adminRoute);
 const storeRoute = require('./routes/store-route');
 app.use('/store', storeRoute);
 
+const showroomRoute = require('./routes/showroom-route');
+app.use('/showroom', showroomRoute);
+
 app.use('/v/admin/', function(req, res, next) {
   if (req.isAuthenticated()) {
     next();

@@ -11,7 +11,6 @@ router.use(session({cookie: {maxAge: 60000}, secret: 'aun_session'}));
 router.use(passport.initialize());
 router.use(passport.session());
 
-
 passport.use(new LocalStrategy(
   function(username, password, done) {
     models.Employee.findOne({
