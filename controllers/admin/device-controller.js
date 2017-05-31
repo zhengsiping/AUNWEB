@@ -41,7 +41,7 @@ class DeviceController extends BaseController{
         as: 'status'
       }]
     }).then((device) => {
-      this.redirect('/v/admin/devices/?created=' + encodeURIComponent(device.name));
+      this.redirect('/admin/device/?created=' + encodeURIComponent(device.name));
     }).catch((errors) => {
       this.error(errors);
     });

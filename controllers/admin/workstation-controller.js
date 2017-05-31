@@ -34,7 +34,7 @@ class WorkstationController extends BaseController{
       phone: this.body.phone,
       email: this.body.email
     }).then((workstation) => {
-      this.redirect('/v/admin/workstations/?created=' + encodeURIComponent(workstation.name));
+      this.redirect('/admin/workstation/?created=' + encodeURIComponent(workstation.name));
     }).catch((errors) => {
       this.error(errors);
     });

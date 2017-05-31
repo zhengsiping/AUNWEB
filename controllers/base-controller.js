@@ -7,21 +7,41 @@ class BaseController {
     this.next = next;
     this.body = req.body;
     this.query = req.query;
+    this.errors = [];
+    this.validator = require('validator');
   }
 
   render(view, data) {
-    this.res.render('admin/' + view, data);
+    // this.res.render('admin/' + view, data);
   }
 
-  error(errors) {
+  error(errors, message) {
     this.next(errors);
   }
 
+  addError(error) {
+    this.errors.push(error);
+  }
+
+  addErrors(errors) {
+    this.errors = this.errors.concat(errors);
+  }
+
+  addValidationErrors(errors) {
+    if (Array.isArray(errors)) {
+      errors.forEach((e) => {
+        this.addError(e.msg);
+      })
+    }
+
+  }
+
+
   redirect(url) {
-    res.writeHead(302, {
+    this.res.writeHead(302, {
       'Location': url
     });
-    res.end();
+    this.res.end();
   }
 }
 module.exports = BaseController;

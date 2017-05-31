@@ -9,12 +9,15 @@
     "bcrypt": "^1.0.2",
     "body-parser": "~1.17.1",
     "bootstrap": "^4.0.0-alpha.6",
+    "collections": "^5.0.6",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "express-flash": "0.0.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.2",
+    "express-validator": "^3.2.0",
     "flash": "^1.1.0",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
@@ -23,6 +26,8 @@
     "passport-local": "^1.0.0",
     "sequelize": "^3.30.4",
     "sequelize-cli": "^2.7.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "validator": "^7.0.0",
+    "wechat-oauth": "^1.2.1"
   }
 }

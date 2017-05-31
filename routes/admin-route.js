@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
-var flash = require('connect-flash');
+// var flash = require('connect-flash');
 var session = require('express-session')
 var models = require('../models');
 var passport = require('passport')
@@ -49,7 +49,7 @@ passport.deserializeUser(function(id, done) {
 /* GET users listing. */
 router.get('/login', function(req, res, next) {
   if (req.isAuthenticated()) {
-    res.redirect('/v/admin');
+    res.redirect('/admin');
   } else {
     Controller = require('../controllers/admin/login-controller');
     const instance = new Controller(req, res, next);
@@ -58,18 +58,19 @@ router.get('/login', function(req, res, next) {
 
 });
 router.post('/login',
-  passport.authenticate('local', { successRedirect: '/v/admin',
-    failureRedirect: '/v/admin/login',
+  passport.authenticate('local', { successRedirect: '/admin',
+    failureRedirect: '/admin/login',
     failureFlash: true })
 );
 
 
 router.use('/logout', function(req, res, next) {
   req.logout();
-  res.redirect('/v/admin/login');
+  res.redirect('/admin/login');
 });
 
 router.use((req, res, next) => {
+  console.log('xuexue');
   if (req.isAuthenticated()) {
     if (req.path === '/') {
       Controller = require('../controllers/admin/index-controller');
@@ -109,7 +110,11 @@ router.use((req, res, next) => {
         const instance = new Controller(req, res, next);
         if (action && typeof  instance[action] === 'function') {
           req.id = id;
-          instance[action]();
+          try {
+            instance[action]();
+          } catch (e) {
+            next(e);
+          }
         } else {
           const err = new Error('页面行为没有找到');
           err.status = 404;
@@ -124,11 +129,12 @@ router.use((req, res, next) => {
       }
     }
   } else {
+    console.log('ere');
     if (req.isAjax) {
 
     } else {
-      req.flash('errorMsg', 'You are not log in');
-      res.redirect('/v/admin/login');
+      req.flash('pageErrors', ['You are not log in']);
+      res.redirect('/admin/login');
     }
   }
 });

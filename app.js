@@ -4,12 +4,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var models = require('./models');
 var bcrypt = require('bcrypt');
-var flash = require('connect-flash');
+var flash = require('express-flash');
 var session = require('express-session')
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
+
+global.__base = __dirname + '/';
+global.__daoPath = __dirname + '/daos/';
+global.__modelPath = __dirname + '/mmodels/';
+global.__controllerPath = __dirname + '/controllers/';
+global.__adminURL = '/admin';
 
 
 
@@ -25,11 +32,12 @@ app.set('views', __dirname + '/views');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 app.use(session({cookie: {maxAge: 60000}, secret: 'aun_session'}));
+app.use(expressValidator([])); // this line must be immediately after any of the bodyParser middlewares!
 
 app.use('/:source/:app/', function(req, res, next) {
   switch (req.params.source) {
@@ -58,8 +66,15 @@ app.use('/:source/:app/', function(req, res, next) {
   next();
 });
 
+const wechatOauth = require('./routes/wechat-login-route');
+app.use('/wechatLogin', wechatOauth);
+
 const adminRoute = require('./routes/admin-route');
-app.use('/v/admin/', adminRoute);
+// app.use('/admin/', function(req, res, next) {
+//   req.isMVC = true;
+//   next();
+// });
+app.use('/admin', adminRoute);
 
 const storeRoute = require('./routes/store-route');
 app.use('/store', storeRoute);
@@ -67,19 +82,19 @@ app.use('/store', storeRoute);
 const showroomRoute = require('./routes/showroom-route');
 app.use('/showroom', showroomRoute);
 
-app.use('/v/admin/', function(req, res, next) {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    req.flash('errorMsg', 'You are not log in');
-    res.redirect('/v/admin/login');
-  }
-});
-
-app.get('/v/admin/logout', function(req, res, next) {
-  req.logout();
-  res.redirect('/v/admin/login');
-});
+// app.use('/v/admin/', function(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     next();
+//   } else {
+//     req.flash('errorMsg', 'You are not log in');
+//     res.redirect('/v/admin/login');
+//   }
+// });
+//
+// app.get('/v/admin/logout', function(req, res, next) {
+//   req.logout();
+//   res.redirect('/v/admin/login');
+// });
 
 var users = require('./routes/users');
 var workstations = require('./routes/workstations');
@@ -92,17 +107,18 @@ app.use('/api/devices', devices);
 app.use('/api/employees', employees);
 app.use('/v/admin/under_construction', function(req, res) {
   res.render('under_construction', {});
-});
 
+});
 app.use('/:source/admin/workstations', workstations);
 app.use('/:source/admin/devices', devices);
 app.use('/:source/admin/employees', employees);
 app.use('/under_construction', function(req, res) {
   res.render('under_construction', {});
 });
-app.get('/:source/admin', function(req, res) {
-  res.render('index');
-});
+// app.get('/:source/admin', function(req, res) {
+//   res.render('index');
+// });
+
 
 
 var index = require('./routes/website/index');

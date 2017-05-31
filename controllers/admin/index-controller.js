@@ -4,6 +4,20 @@ var BaseController = require('./base-controller');
 
 class IndexController extends BaseController{
   index () {
+    // const CityModel = require('../../mmodels/city-model');
+    // const instance = new CityModel();
+    // instance.findById(1, function (error, model) {
+    //   if (!error) {
+    //     console.log(model.id);
+    //     console.log(model.name);
+    //   }
+    // });
+    // const CityCollection = require('../../mmodels/city-collection');
+    // const instance2 = new CityCollection();
+    // instance2.findAll((error,collection) => {
+    //   console.log(collection.length);
+    // });
+    // return;
     models.Device.findAll({
       include: [
         {model: models.DeviceType, as: 'type'},
